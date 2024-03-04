@@ -1,9 +1,13 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const dotenv = require("dotenv");
+dotenv.config();
 
-const main = async () => {
-  await mongoose.connect("mongodb://loc");
-};
+async function main() {
+  await mongoose.connect(process.env.MONGO_URL);
+  console.log("Database Connected");
+}
+main().catch((err) => console.log(err));
 
 const app = express();
 
