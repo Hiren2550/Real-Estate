@@ -1,4 +1,9 @@
 const express = require("express");
+const mongoose = require("mongoose");
+
+const main = async () => {
+  await mongoose.connect("mongodb://loc");
+};
 
 const app = express();
 
