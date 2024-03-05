@@ -22,7 +22,6 @@ app.use((err, req, res, next) => {
   const message = err.message || "internal Server Error";
   return res.status(statuscode).json({ success: false, statuscode, message });
 });
-
 app.listen(3000, () => {
   console.log(`Server running at Port 3000!!`);
 });
