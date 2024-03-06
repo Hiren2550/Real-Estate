@@ -29,7 +29,7 @@ export default function SignIn() {
         });
         const data = await res.json();
         //console.log(data);
-        if (data.success == false) {
+        if (data.success === false) {
           dispatch(signInFailure(data.message));
           return;
         }
@@ -65,7 +65,10 @@ export default function SignIn() {
           id="password"
           onChange={handleChange}
         />
-        <button className="bg-slate-700 rounded-lg text-white p-3 uppercase hover:opacity-95  disabled:opacity-80">
+        <button
+          disabled={load}
+          className="bg-slate-700 rounded-lg text-white p-3 uppercase hover:opacity-95  disabled:opacity-80"
+        >
           {load ? <Loading /> : "Sign In"}
         </button>
         <OAuth />
