@@ -50,21 +50,21 @@ export default function SignUp() {
       <h1 className="text-3xl text-center font-semibold my-7">Sign Up</h1>
       <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
         <input
-          className=" border p-3 focus:outline-none rounded-lg"
+          className=" border border-gray-300  p-3 focus:outline-none rounded-lg"
           type="text"
           placeholder="Enter username"
           id="username"
           onChange={handleChange}
         />
         <input
-          className=" border p-3 focus:outline-none rounded-lg"
+          className=" border border-gray-300  p-3 focus:outline-none rounded-lg"
           type="email"
           placeholder="Enter email"
           id="email"
           onChange={handleChange}
         />
         <input
-          className=" border p-3 focus:outline-none rounded-lg"
+          className=" border p-3 border-gray-300  focus:outline-none rounded-lg"
           type="password"
           placeholder="Enter password"
           id="password"

@@ -19,6 +19,7 @@ import {
   updateUserSuccess,
 } from "../redux/user/userSlice";
 import Loading from "../Components/Loading";
+import { Link } from "react-router-dom";
 
 //firebase
 //  allow read;
@@ -143,7 +144,7 @@ export default function Profile() {
         />
         <img
           onClick={() => fileRef.current.click()}
-          className="rounded-full h-24 w-24 object-cover cursor-pointer self-center mt-2"
+          className="rounded-full border-gray-300 h-24 w-24 object-cover cursor-pointer self-center mt-2"
           src={formData.avatar || currentUser.avatar}
           alt="Profile"
         />
@@ -161,7 +162,7 @@ export default function Profile() {
           )}
         </p>
         <input
-          className=" border p-3 focus:outline-none rounded-lg "
+          className=" border p-3  border-gray-300 focus:outline-none rounded-lg "
           type="text"
           placeholder="username"
           id="username"
@@ -169,7 +170,7 @@ export default function Profile() {
           onChange={handleChange}
         />
         <input
-          className=" border p-3 focus:outline-none rounded-lg "
+          className=" border p-3 border-gray-300 focus:outline-none rounded-lg "
           type="email"
           placeholder="email"
           id="email"
@@ -177,7 +178,7 @@ export default function Profile() {
           onChange={handleChange}
         />
         <input
-          className=" border p-3 focus:outline-none rounded-lg "
+          className=" border p-3 border-gray-300 focus:outline-none rounded-lg "
           type="password"
           placeholder="password"
           id="password"
@@ -189,6 +190,12 @@ export default function Profile() {
         >
           {load ? <Loading /> : "Update"}
         </button>
+        <Link
+          to={"/create-listing"}
+          className="bg-green-700 uppercase text-white text-center p-3 rounded-lg hover:opacity-95"
+        >
+          Create Listing
+        </Link>
       </form>
       <div className="flex justify-between mt-5">
         <span className="text-red-700 cursor-pointer" onClick={handleDelete}>
