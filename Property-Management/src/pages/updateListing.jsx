@@ -224,7 +224,7 @@ export default function UpdateListing() {
                 id="parking"
                 className="w-4 border-gray-300"
                 onChange={handleChange}
-                checked={formData.parking}
+                checked={formData.parking === true}
               />
               <span>Parking spot</span>
             </div>
@@ -234,7 +234,7 @@ export default function UpdateListing() {
                 id="furnished"
                 className="w-4 border-gray-300"
                 onChange={handleChange}
-                checked={formData.furnished}
+                checked={formData.furnished === true}
               />
               <span>Furnished</span>
             </div>
@@ -244,7 +244,7 @@ export default function UpdateListing() {
                 id="offer"
                 className="w-4 border-gray-300"
                 onChange={handleChange}
-                checked={formData.offer}
+                checked={formData.offer === true}
               />
               <span>Offer</span>
             </div>
