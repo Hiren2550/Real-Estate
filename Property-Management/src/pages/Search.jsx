@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import ListingCard from "../Components/ListingCard";
 
 export default function Search() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [Listing, setListing] = useState([]);
+  const [listing, setListing] = useState([]);
   const [sidebardata, setsidebardata] = useState({
     searchTerm: "",
     type: "all",
@@ -15,7 +16,7 @@ export default function Search() {
     order: "desc",
   });
   //console.log(sidebardata);
-  console.log(Listing);
+  //console.log(listing);
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
     const searchTermFromUrl = urlParams.get("searchTerm");
@@ -209,10 +210,26 @@ export default function Search() {
           </button>
         </form>
       </div>
-      <div className="">
-        <h1 className="text-3xl font-semibold border-b p-3 text-slate-700 mt-5">
+      <div className="flex-1">
+        <h1 className=" border-b  text-3xl font-semibold p-3 text-slate-700 mt-5">
           Listing results :
         </h1>
+        <div className="p-7 flex flex-wrap gap-4">
+          {!loading && listing.length === 0 && (
+            <p className="text-xl text-slate-700">No listing found!!</p>
+          )}
+          {loading && (
+            <p className="text-xl text-center text-slate-700 w-full">
+              Loading...
+            </p>
+          )}
+
+          {!loading &&
+            listing &&
+            listing.map((listing) => (
+              <ListingCard key={listing._id} listing={listing} />
+            ))}
+        </div>
       </div>
     </div>
   );
