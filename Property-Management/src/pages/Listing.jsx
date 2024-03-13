@@ -21,6 +21,7 @@ export default function Listing() {
   SwiperCore.use([Navigation]);
   const { currentUser } = useSelector((state) => state.user);
   const [listing, setListing] = useState(null);
+  //console.log(listing);
   const [loading, setLoading] = useState(false);
   const [contact, setContact] = useState(false);
   const [error, setError] = useState(false);
@@ -40,6 +41,7 @@ export default function Listing() {
           return;
         }
         setListing(data);
+        //console.log(data);
         setLoading(false);
         setError(false);
       } catch (error) {
@@ -92,10 +94,10 @@ export default function Listing() {
           )}
           <div className="flex flex-col max-w-5xl mx-auto p-3 my-7 gap-4">
             <p className="text-2xl font-semibld">
-              {listing.name} - ₹{" "}
-              {listing.offer
-                ? listing.discountPrice.toLocaleString("en-india")
-                : listing.regularPrice.toLocaleString("en-india")}
+              {listing.name} - ₹
+              {listing.offer && listing.discountPrice > 0
+                ? listing.discountPrice.toLocaleString("en-us")
+                : listing.regularPrice.toLocaleString("en-us")}
               {listing.type === "rent" && " / month"}
             </p>
             <p className="flex items-center mt-6 gap-2 text-slate-600  text-sm">
@@ -106,7 +108,7 @@ export default function Listing() {
               <p className="bg-red-900 w-full max-w-[200px] text-white text-center p-1 rounded-md">
                 {listing.type === "rent" ? "For Rent" : "For Sale"}
               </p>
-              {listing.offer && (
+              {listing.offer && listing.discountPrice > 0 && (
                 <p className="bg-green-900 w-full max-w-[200px] text-white text-center p-1 rounded-md">
                   ₹ {+listing.regularPrice - +listing.discountPrice} OFF
                 </p>

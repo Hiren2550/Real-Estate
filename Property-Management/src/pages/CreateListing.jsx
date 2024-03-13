@@ -27,6 +27,7 @@ export default function CreateListing() {
     furnished: false,
     parking: false,
   });
+
   const [imageUploadError, setImageUploadError] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState(false);

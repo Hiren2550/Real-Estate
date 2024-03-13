@@ -26,9 +26,9 @@ export default function ListingCard({ listing }) {
 
           <p className="text-slate-700 mt-2 font-semibold flex items-center">
             ₹
-            {listing.offer
-              ? listing.discountPrice.toLocaleString("en-india")
-              : listing.regularPrice.toLocaleString("en-india")}
+            {listing.offer === true
+              ? listing.discountPrice.toLocaleString("en-us")
+              : listing.regularPrice.toLocaleString("en-us")}
             {listing.type === "rent" && " / month"}
           </p>
           <div className="text-slate-700 flex gap-4">
