@@ -21,7 +21,7 @@ export default function Header() {
     console.log(searchTermFromUrl);
     if (searchTermFromUrl) {
       setSearchTerm(searchTermFromUrl);
-      console.log(searchTerm);
+      //console.log(searchTerm);
     }
   }, [location.search]);
 
