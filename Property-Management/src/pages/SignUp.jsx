@@ -71,7 +71,7 @@ export default function SignUp() {
           onChange={handleChange}
         />
         <button className="bg-slate-700 rounded-lg text-white p-3 uppercase hover:opacity-95  disabled:opacity-80">
-          {load ? <Loading /> : "Sign Up"}
+          {load ? "loading" : "Sign Up"}
         </button>
         <OAuth />
       </form>
