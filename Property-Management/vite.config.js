@@ -9,12 +9,12 @@ export default defineConfig(({ mode }) => {
   const firebaseKey =
     env.VITE_FIREBASE_API_KEY ||
     env.FIREBASE_API_KEY ||
-    "AIzaSyBAdnb6CU0SedRG-Y4R8AyT8O18uCTBEcQ";
+    "";
 
   const web3Key =
     env.VITE_WEB3FORMS_ACCESS_KEY ||
     env.WEB3FORMS_ACCESS_KEY ||
-    "53298b97-4aae-4a1e-818b-a823e8a4e447";
+    "";
 
   return {
     server: {

@@ -30,7 +30,9 @@ export default function ContactUs() {
           Accept: "application/json",
         },
         body: JSON.stringify({
-          access_key: "53298b97-4aae-4a1e-818b-a823e8a4e447",
+          access_key:
+            import.meta.env.VITE_WEB3FORMS_ACCESS_KEY ||
+            process.env.WEB3FORMS_ACCESS_KEY,
           from_name: `PrimeEstate Inquiry: ${formData.name}`,
           subject: `New Lead: ${formData.subject} from ${formData.name}`,
           name: formData.name,

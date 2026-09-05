@@ -3,7 +3,7 @@ import { initializeApp } from "firebase/app";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "AIzaSyBAdnb6CU0SedRG-Y4R8AyT8O18uCTBEcQ",
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
   authDomain: "primeestate-6f35b.firebaseapp.com",
   projectId: "primeestate-6f35b",
   storageBucket: "primeestate-6f35b.firebasestorage.app",
