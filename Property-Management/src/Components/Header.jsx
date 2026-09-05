@@ -49,14 +49,14 @@ export default function Header() {
             <FaSearch className="text-slate-600" />
           </button>
         </form>
-        <ul className="flex gap-4">
+        <ul className="flex items-center gap-2 sm:gap-4 text-xs sm:text-base">
           <Link to="/">
-            <li className="hidden sm:inline text-slate-800 hover:underline">
+            <li className="text-slate-800 hover:underline px-1 py-1">
               Home
             </li>
           </Link>
           <Link to="/about">
-            <li className="hidden sm:inline text-slate-800 hover:underline">
+            <li className="text-slate-800 hover:underline px-1 py-1">
               About
             </li>
           </Link>
@@ -70,10 +70,10 @@ export default function Header() {
                   e.target.src =
                     "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png";
                 }}
-                className="rounded-full w-7 h-7 object-cover flex items-center"
+                className="rounded-full w-7 h-7 sm:w-8 sm:h-8 object-cover flex items-center border border-slate-300"
               />
             ) : (
-              <li className="sm:inline text-slate-800 hover:underline">
+              <li className="text-slate-800 hover:underline px-1 py-1 font-medium">
                 Sign In
               </li>
             )}

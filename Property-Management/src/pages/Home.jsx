@@ -13,62 +13,91 @@ export default function Home() {
   const [offerListings, setOfferListings] = useState([]);
   const [rentListings, setRentListings] = useState([]);
   const [saleListings, setSaleListings] = useState([]);
-  console.log(saleListings);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const fetchOfferListings = async () => {
+    const fetchAllHomeData = async () => {
       try {
-        const res = await fetch("/api/listing/get?offer=true&limit=4");
-        const data = await res.json();
-        setOfferListings(data);
-        fetchRentListings();
+        setLoading(true);
+        const [offerRes, rentRes, saleRes] = await Promise.all([
+          fetch("/api/listing/get?offer=true&limit=4"),
+          fetch("/api/listing/get?type=rent&limit=4"),
+          fetch("/api/listing/get?type=sell&limit=4"),
+        ]);
+
+        const [offerData, rentData, saleData] = await Promise.all([
+          offerRes.json(),
+          rentRes.json(),
+          saleRes.json(),
+        ]);
+
+        if (Array.isArray(offerData)) setOfferListings(offerData);
+        if (Array.isArray(rentData)) setRentListings(rentData);
+        if (Array.isArray(saleData)) setSaleListings(saleData);
       } catch (error) {
-        console.log(error.message);
+        console.error("Home data fetch error:", error.message);
+      } finally {
+        setLoading(false);
       }
     };
-    const fetchRentListings = async () => {
-      try {
-        const res = await fetch("/api/listing/get?type=rent&limit=4");
-        const data = await res.json();
-        setRentListings(data);
-        fetchSaleListings();
-      } catch (error) {
-        console.log(error.message);
-      }
-    };
-    const fetchSaleListings = async () => {
-      try {
-        const res = await fetch("/api/listing/get?type=sell&limit=4");
-        const data = await res.json();
-        setSaleListings(data);
-      } catch (error) {
-        console.log(error.message);
-      }
-    };
-    fetchOfferListings();
+
+    fetchAllHomeData();
   }, []);
   return (
-    <div>
+    <div className="animate-fade-in pb-12">
       {/* top */}
-      <div className=" flex flex-col gap-6 p-10 px-2  md:p-28 md:px-3 max-w-6xl mx-auto ">
-        <h1 className="text-slate-700 font-bold text-3xl lg:text-6xl">
-          Find your next <span className="text-slate-500">Perfect</span>
+      <div className="flex flex-col gap-6 p-8 px-4 md:p-24 md:px-6 max-w-6xl mx-auto">
+        <div className="inline-block self-start px-3 py-1 rounded-full bg-blue-100 text-blue-800 text-xs sm:text-sm font-semibold tracking-wide">
+          ✨ The Smart Way to Find Real Estate
+        </div>
+        <h1 className="text-slate-800 font-extrabold text-3xl sm:text-5xl lg:text-6xl tracking-tight leading-tight">
+          Find your next <span className="text-blue-700">Perfect</span>
           <br />
           place with ease
         </h1>
-        <div className=" text-gray-500 text-xs sm:text-sm">
+        <div className="text-slate-600 text-sm sm:text-base max-w-2xl leading-relaxed">
           <p>
-            Prime Estate is best place to find your next perfect place to live
-            <br />
-            we have a wide range of properties for you to choose from.
+            Prime Estate is your premier platform to buy, rent, and discover modern living spaces across India with transparent pricing and verified listings.
           </p>
         </div>
-        <Link
-          to={"/search"}
-          className="text-xs sm:text-sm font-bold text-blue-800 hover:underline"
-        >
-          Let's get started...
-        </Link>
+
+        {/* Quick action buttons & stats */}
+        <div className="flex flex-wrap items-center gap-4 pt-2">
+          <Link
+            to={"/search"}
+            className="px-6 py-3 bg-blue-700 hover:bg-blue-800 text-white font-semibold rounded-xl shadow-md hover:shadow-lg transition-all duration-200 text-sm sm:text-base"
+          >
+            Explore All Properties →
+          </Link>
+          <Link
+            to={"/search?type=rent"}
+            className="px-5 py-3 bg-white hover:bg-slate-100 text-slate-700 font-semibold rounded-xl border border-slate-200 shadow-sm transition-all duration-200 text-sm"
+          >
+            Properties for Rent
+          </Link>
+          <Link
+            to={"/search?type=sell"}
+            className="px-5 py-3 bg-white hover:bg-slate-100 text-slate-700 font-semibold rounded-xl border border-slate-200 shadow-sm transition-all duration-200 text-sm"
+          >
+            Properties for Sale
+          </Link>
+        </div>
+
+        {/* Stats */}
+        <div className="grid grid-cols-3 gap-4 pt-6 max-w-lg border-t border-slate-200/80">
+          <div>
+            <p className="text-2xl sm:text-3xl font-extrabold text-slate-800">20+</p>
+            <p className="text-xs text-slate-500 font-medium">Curated Listings</p>
+          </div>
+          <div>
+            <p className="text-2xl sm:text-3xl font-extrabold text-slate-800">10+</p>
+            <p className="text-xs text-slate-500 font-medium">Top Cities</p>
+          </div>
+          <div>
+            <p className="text-2xl sm:text-3xl font-extrabold text-slate-800">100%</p>
+            <p className="text-xs text-slate-500 font-medium">Verified Photos</p>
+          </div>
+        </div>
       </div>
       {/* middle */}
 
@@ -84,7 +113,7 @@ export default function Home() {
                   backgroundRepeat: "no-repeat",
                   backgroundSize: "cover",
                 }}
-                className="h-[500px]"
+                className="h-[300px] sm:h-[450px] md:h-[500px]"
                 key={listing._id}
               ></div>
             </SwiperSlide>

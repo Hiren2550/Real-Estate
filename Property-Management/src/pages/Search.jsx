@@ -5,6 +5,7 @@ import ListingCard from "../Components/ListingCard";
 export default function Search() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
   const [listing, setListing] = useState([]);
   const [showMore, setShowMore] = useState(false);
   const [sidebardata, setsidebardata] = useState({
@@ -51,17 +52,28 @@ export default function Search() {
     const fetchListings = async () => {
       setShowMore(false);
       setLoading(true);
-      const searchQuery = urlParams.toString();
-      const res = await fetch(`/api/listing/get?${searchQuery}`);
-      const data = await res.json();
-      if (data.length > 8) {
-        setShowMore(true);
-      } else {
-        setShowMore(false);
-      }
+      setError(false);
+      try {
+        const searchQuery = urlParams.toString();
+        const res = await fetch(`/api/listing/get?${searchQuery}`);
+        const data = await res.json();
+        if (data.success === false) {
+          setError(true);
+          setLoading(false);
+          return;
+        }
+        if (data.length > 8) {
+          setShowMore(true);
+        } else {
+          setShowMore(false);
+        }
 
-      setListing(data);
-      setLoading(false);
+        setListing(data);
+      } catch (err) {
+        setError(true);
+      } finally {
+        setLoading(false);
+      }
     };
     fetchListings();
   }, [location.search]);
@@ -237,26 +249,52 @@ export default function Search() {
           Listing results :
         </h1>
         <div className="p-7 flex flex-wrap gap-4">
-          {!loading && listing.length === 0 && (
-            <p className="text-xl text-slate-700">No listing found!!</p>
+          {error && (
+            <div className="w-full text-center py-10">
+              <p className="text-xl text-rose-600 font-medium">Failed to load listings. Please try again.</p>
+            </div>
           )}
+
           {loading && (
-            <p className="text-xl text-center text-slate-700 w-full">
-              Loading...
-            </p>
+            <div className="flex flex-wrap gap-4 w-full">
+              {[1, 2, 3, 4, 5, 6].map((n) => (
+                <div
+                  key={n}
+                  className="bg-white border border-slate-200/70 rounded-xl w-full sm:w-[270px] max-w-md mx-auto sm:mx-0 overflow-hidden shadow-sm animate-pulse-glow"
+                >
+                  <div className="h-[180px] bg-slate-200"></div>
+                  <div className="p-4 flex flex-col gap-3">
+                    <div className="h-4 bg-slate-200 rounded w-3/4"></div>
+                    <div className="h-3 bg-slate-200 rounded w-1/2"></div>
+                    <div className="h-3 bg-slate-200 rounded w-full"></div>
+                    <div className="h-5 bg-slate-200 rounded w-1/3 mt-2"></div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {!loading && !error && listing.length === 0 && (
+            <div className="w-full text-center py-16 bg-white rounded-2xl border border-slate-200/80 my-4 shadow-sm">
+              <p className="text-2xl font-bold text-slate-700">No matching properties found</p>
+              <p className="text-sm text-slate-500 mt-2">
+                Try adjusting your search terms, changing filters, or clearing amenities.
+              </p>
+            </div>
           )}
 
           {!loading &&
+            !error &&
             listing &&
-            listing.map((listing) => (
-              <ListingCard key={listing._id} listing={listing} />
+            listing.map((item) => (
+              <ListingCard key={item._id} listing={item} />
             ))}
           {showMore && (
             <button
               onClick={() => onShowMoreClick()}
-              className="text-green-700 hover:underline p-7 w-full text-center"
+              className="text-blue-700 font-semibold hover:underline p-7 w-full text-center transition-colors"
             >
-              Show more
+              Show more listings ↓
             </button>
           )}
         </div>

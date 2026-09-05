@@ -93,13 +93,21 @@ export const searchListing = async (req, res, next) => {
 
     const order = req.query.order || "desc";
 
-    const listings = await Listing.find({
-      name: { $regex: searchTerm, $options: "i" },
+    const queryConditions = {
       offer,
       furnished,
       parking,
       type,
-    })
+    };
+
+    if (searchTerm) {
+      queryConditions.$or = [
+        { name: { $regex: searchTerm, $options: "i" } },
+        { address: { $regex: searchTerm, $options: "i" } },
+      ];
+    }
+
+    const listings = await Listing.find(queryConditions)
       .sort({ [sort]: order })
       .limit(limit)
       .skip(startIndex);

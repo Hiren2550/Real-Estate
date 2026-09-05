@@ -5,6 +5,7 @@ import dns from "dns";
 import userRouter from "../api/routes/user.route.js";
 import authRouter from "../api/routes/auth.route.js";
 import listingRouter from "../api/routes/listing.route.js";
+import uploadRouter from "../api/routes/upload.route.js";
 import cookieParser from "cookie-parser";
 import path from "path";
 dotenv.config();
@@ -19,12 +20,13 @@ main().catch((err) => console.log(err));
 
 const __dirname = path.resolve();
 const app = express();
-app.use(express.json());
+app.use(express.json({ limit: "25mb" }));
+app.use(express.urlencoded({ extended: true, limit: "25mb" }));
 app.use(cookieParser());
-//app.use(express.urlencoded());
 app.use("/api/user", userRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/listing", listingRouter);
+app.use("/api/upload", uploadRouter);
 
 app.use(express.static(path.join(__dirname, "Property-Management/dist")));
 

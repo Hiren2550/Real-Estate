@@ -44,28 +44,38 @@ export default function Profile() {
   const fileRef = useRef(null);
 
   const handleFileUpload = (file) => {
-    const storage = getStorage(app);
-    const fileName = new Date().getTime() + file.name;
-    const storageRef = ref(storage, fileName);
-    const uploadTask = uploadBytesResumable(storageRef, file);
-
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {
-        const progress =
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        setFilePerc(Math.round(progress));
-        //console.log("upload is" + progress + "% done");
-      },
-      (error) => {
-        setFileUploadError(true);
-      },
-      () => {
-        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          setFormData({ ...formData, avatar: downloadURL });
+    setFileUploadError(false);
+    setFilePerc(10);
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = async () => {
+      try {
+        setFilePerc(40);
+        const res = await fetch("/api/upload/image", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ image: reader.result }),
         });
+        setFilePerc(80);
+        const data = await res.json();
+        if (data.success === false) {
+          setFileUploadError(true);
+          setFilePerc(0);
+          return;
+        }
+        setFilePerc(100);
+        setFormData({ ...formData, avatar: data.url });
+      } catch (error) {
+        setFileUploadError(true);
+        setFilePerc(0);
       }
-    );
+    };
+    reader.onerror = () => {
+      setFileUploadError(true);
+      setFilePerc(0);
+    };
   };
   useEffect(() => {
     if (file) {
@@ -261,32 +271,34 @@ export default function Profile() {
           {userListings.map((listing) => (
             <div
               key={listing._id}
-              className="border border-gray-300 rounded-lg p-3 flex justify-between items-center gap-4"
+              className="border border-gray-300 rounded-lg p-3 flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-4"
             >
-              <Link to={`/listing/${listing._id}`}>
-                <img
-                  src={listing.imageUrls[0]}
-                  alt="listing cover"
-                  className="w-18 h-16 object-contain"
-                />
-              </Link>
-              <Link
-                to={`/listing/${listing._id}`}
-                className="flex-1 text-slate-700 font-semibold hover:underline truncate"
-              >
-                <p>{listing.name}</p>
-              </Link>
-              <div className="flex flex-col items-center gap-4">
+              <div className="flex items-center gap-3 w-full sm:w-auto flex-1 min-w-0">
+                <Link to={`/listing/${listing._id}`} className="shrink-0">
+                  <img
+                    src={listing.imageUrls[0]}
+                    alt="listing cover"
+                    className="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-md"
+                  />
+                </Link>
+                <Link
+                  to={`/listing/${listing._id}`}
+                  className="flex-1 text-slate-700 font-semibold hover:underline truncate"
+                >
+                  <p className="truncate text-sm sm:text-base">{listing.name}</p>
+                </Link>
+              </div>
+              <div className="flex sm:flex-col items-center justify-end gap-2 sm:gap-3 w-full sm:w-auto">
                 <button
                   onClick={() => handleDeleteListing(listing._id)}
-                  className="text-red-700 uppercase"
+                  className="text-red-700 uppercase text-xs sm:text-sm border sm:border-0 border-red-200 px-3 py-1 rounded"
                   type="button"
                 >
                   Delete
                 </button>
 
                 <Link to={`/update-listing/${listing._id}`}>
-                  <button className="text-green-700 uppercase" type="button">
+                  <button className="text-green-700 uppercase text-xs sm:text-sm border sm:border-0 border-green-200 px-3 py-1 rounded" type="button">
                     Edit
                   </button>
                 </Link>
