@@ -1,12 +1,15 @@
 import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import dns from "dns";
 import userRouter from "../api/routes/user.route.js";
 import authRouter from "../api/routes/auth.route.js";
 import listingRouter from "../api/routes/listing.route.js";
 import cookieParser from "cookie-parser";
 import path from "path";
 dotenv.config();
+
+dns.promises.setServers(["8.8.8.8", "1.1.1.1"]);
 
 async function main() {
   await mongoose.connect(process.env.MONGO_URL);

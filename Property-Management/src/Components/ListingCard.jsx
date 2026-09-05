@@ -6,8 +6,16 @@ export default function ListingCard({ listing }) {
     <div className="bg-white  shadow-md hover:shadow-lg transition-shadow  overflow-hidden rounded-lg w-full sm:w-[270px]">
       <Link to={`/listing/${listing._id}`}>
         <img
-          src={listing.imageUrls[0]}
+          src={
+            listing.imageUrls[0] ||
+            "https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=800&q=80"
+          }
           alt="listing image"
+          onError={(e) => {
+            e.target.onerror = null;
+            e.target.src =
+              "https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=800&q=80";
+          }}
           className="h-[210px] sm:h-[178px] w-full object-cover hover:scale-105 transition-scale duration-300"
         />
         <div className="p-3 flex flex-col gap-2 w-full">

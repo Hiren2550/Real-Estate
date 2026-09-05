@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "nodemon api/index.js",
     "start": "node api/index.js",
-    "build" :"npm install && npm install --prefix Property-Management && npm run build --prefix Property-Management"
+    "build": "npm install && npm install --prefix Property-Management && npm run build --prefix Property-Management"
   },
   "keywords": [],
   "author": "",
@@ -19,5 +19,8 @@
     "express": "^4.18.3",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.2.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
   }
 }

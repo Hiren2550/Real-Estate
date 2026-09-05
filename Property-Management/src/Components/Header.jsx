@@ -65,6 +65,11 @@ export default function Header() {
               <img
                 src={currentUser.avatar}
                 alt="Profile"
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src =
+                    "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png";
+                }}
                 className="rounded-full w-7 h-7 object-cover flex items-center"
               />
             ) : (
