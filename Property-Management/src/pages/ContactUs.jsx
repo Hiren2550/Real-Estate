@@ -3,6 +3,8 @@ import { FaPhoneAlt, FaEnvelope, FaMapMarkerAlt, FaClock, FaCheckCircle } from "
 
 export default function ContactUs() {
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -15,9 +17,49 @@ export default function ContactUs() {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setSubmitted(true);
+    setLoading(true);
+    setErrorMsg("");
+
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          access_key: "53298b97-4aae-4a1e-818b-a823e8a4e447",
+          from_name: `PrimeEstate Inquiry: ${formData.name}`,
+          subject: `New Lead: ${formData.subject} from ${formData.name}`,
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone || "Not provided",
+          inquiry_type: formData.subject,
+          message: formData.message,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        setSubmitted(true);
+        setFormData({
+          name: "",
+          email: "",
+          phone: "",
+          subject: "General Inquiry",
+          message: "",
+        });
+      } else {
+        setErrorMsg(result.message || "Failed to submit form. Please try again.");
+      }
+    } catch (err) {
+      setErrorMsg("Network error occurred. Please check your connection and try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -181,11 +223,25 @@ export default function ContactUs() {
                 ></textarea>
               </div>
 
+              {errorMsg && (
+                <div className="p-3.5 bg-rose-50 border border-rose-200 text-rose-700 text-xs sm:text-sm rounded-xl">
+                  {errorMsg}
+                </div>
+              )}
+
               <button
                 type="submit"
-                className="mt-2 bg-blue-700 hover:bg-blue-800 text-white font-semibold py-3.5 px-6 rounded-xl transition-colors text-sm shadow-md"
+                disabled={loading}
+                className="mt-2 bg-blue-700 hover:bg-blue-800 disabled:opacity-75 disabled:cursor-not-allowed text-white font-semibold py-3.5 px-6 rounded-xl transition-all text-sm shadow-md flex items-center justify-center gap-2"
               >
-                Submit Inquiry
+                {loading ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    <span>Sending via Web3Forms...</span>
+                  </>
+                ) : (
+                  <span>Submit Inquiry</span>
+                )}
               </button>
             </form>
           )}
